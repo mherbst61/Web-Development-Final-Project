@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'TicketFinder.apps.TicketfinderConfig',
+    'bootstrap5',
 ]
 
 MIDDLEWARE = [
