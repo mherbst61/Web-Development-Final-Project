@@ -4,43 +4,70 @@
     <meta charset="UTF-8">
     <title>Ticketmaster Final Matt Herbst</title>
     {% load django_bootstrap5 %}
-  {% bootstrap_css %}
-  {% bootstrap_javascript %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 </head>
 <body>
 <div class="topBar bg-dark p-lg-5 p-0 mb-3">
     <div class="text-center text-light container-fluid" id="topText">
         <p class="fs-1">Ticketmaster</p>
-        <p  class="fs-3 fw-bold">Quickly Find tickets around you</p>
+        <p class="fs-3 fw-bold">Quickly Find tickets around you</p>
     </div>
-<div>
-    <form class="container-fluid" method="get">
-        <div class="input-group mb-3">
-   {{form.genre}}
-            <datalist id="datalistOptions">
-  <option value="Music">
-  <option value="Sports">
-  <option value="Theater">
-  <option value="Family">
-  <option value="Arts&Theater">
-    <option value="Concerts">
-    <option value="Comedy">
-    <option value="Dance">
-</datalist>
-            {{ form.city }}
+    <div>
+        <form action="{% url 'search' %}" class="container-fluid" method="post">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                {{ form.genre }}
+                <datalist id="datalistOptions">
+                    <option value="Music">
+                    <option value="Sports">
+                    <option value="Theater">
+                    <option value="Family">
+                    <option value="Arts&Theater">
+                    <option value="Concerts">
+                    <option value="Comedy">
+                    <option value="Dance">
+                </datalist>
+                {{ form.city }}
 
-            <button type="submit" class="btn btn-primary" value="Add">Search</button>
-              </div>
-</form>
+                <button type="submit" class="btn btn-primary" value="Add">Search</button>
+            </div>
+        </form>
     </div>
+
     <div class="mt-2 pb-2" id="alertArea">
 
     </div>
+    {% if not message == "" %}
+    	  <div class="alert alert-danger" role="alert">
+      {{ message }}
+    </div>
+    {% endif %}
+
 </div>
 <!-- This div is a placeholder for the information coming from the API -->
 <div class="container shadow-lg p-lg-5 pt-3" id="results">
 
 
+    {% for ticket in tickets %}
+        <div class="row h-4 shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+            <div class="col-lg-4 col-12">
+                <img src="{{ img }}" class="img-fluid rounded" alt="event-img"/>
+            </div>
+            <div class="col-lg-4 col-6 mt-lg-0 mt-3">
+                <p class="fs-4">{{ ticket.event_name }}</p>
+                <p class="fs-5"><i class="bi bi-geo-alt-fill"></i> {{ theaterName }}</p>
+                <p></p>
+                <p>{{ address1 }}<br>{{ address2 }}</p>
+            </div>
+            <div class="col-lg-4 col-6 mt-lg-0 mt-3 text-end text-primary-emphasis">
+                <p class="text-primary-emphasis fw-bold fs-5">{{ date }}</p>
+                <p class="text-primary-emphasis fw-bold fs-4">{{ time }}</p>
+                <a type="button" class="btn btn-outline-primary" href={{ ticket.event_url }} target="_blank"><i
+                        class="bi bi-ticket-detailed-fill"></i> Find Tickets</a>
+            </div>
+        </div>
+    {% endfor %}
 
 </div>
 
