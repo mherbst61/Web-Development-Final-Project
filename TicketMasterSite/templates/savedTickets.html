@@ -11,35 +11,10 @@
 <div class="topBar bg-dark p-lg-5 p-0 mb-3">
     <div class="text-center text-light container-fluid" id="topText">
         <p class="fs-1">Ticketmaster</p>
-        <p class="fs-3 fw-bold">Quickly Find tickets around you</p>
+        <p class="fs-3 fw-bold">Saved Tickets</p>
     </div>
     <div>
-        <form action="{% url 'search' %}" class="container-fluid" method="post">
-            {% csrf_token %}
-            <div class="input-group mb-3">
-                {{ search_form.state }}
-                {{ search_form.genre }}
-                <datalist id="datalistOptions">
-                    <option value="Music">
-                    <option value="Sports">
-                    <option value="Theater">
-                    <option value="Family">
-                    <option value="Arts&Theater">
-                    <option value="Concerts">
-                    <option value="Comedy">
-                    <option value="Dance">
-                </datalist>
-                {{ search_form.city }}
-
-                <button type="submit" class="btn btn-primary">Search</button>
-            </div>
-        </form>
     </div>
-
-    <div class="mt-2 pb-2" id="alertArea">
-
-    </div>
-
 </div>
 <!-- This div is a placeholder for the information coming from the API -->
 <div class="container shadow-lg p-lg-5 pt-3" id="results">
@@ -67,13 +42,9 @@
             <div class="col-lg-4 col-6 mt-lg-0 mt-3 text-end text-primary-emphasis">
                 <p class="text-primary-emphasis fw-bold fs-5">{{ ticket.event_ConvertedDate }}</p>
                 <p class="text-primary-emphasis fw-bold fs-4">{{ ticket.event_ConvertedTime }}</p>
-                <a type="button" class="btn btn-outline-primary" href={{ ticket.event_url }} target="_blank"><i
+                <a type="button" class="btn btn-outline-primary"><i
                         class="bi bi-ticket-detailed-fill"></i> View Ticket</a>
-                <form>
-                    {% csrf_token %}
-                    <!-- {#  #}{ save_TicketForm.ticketData value ={#  #}{ticket.ticket_data}} }} -->
-                    <button type="submit" class="btn btn-outline-primary mt-2"><i class="bi bi-save"></i> Save Ticket</button>
-                </form>
+                <a type="button" class="btn btn-outline-primary"><i class="bi bi-save"></i> Delete Ticket</a>
             </div>
         </div>
     {% endfor %}

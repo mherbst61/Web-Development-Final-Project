@@ -4,31 +4,42 @@ from django.shortcuts import render
 import requests
 from bs4 import BeautifulSoup
 
-from TicketFinder.forms import ticketSearchForm
+from TicketFinder.forms import ticketSearchForm, saveTicketForm
+from TicketFinder.models import save_Ticket
 
 
 # Create your views here.
 def search(request):
-    form = ticketSearchForm(request.POST or None)
+    search_form = ticketSearchForm(request.POST or None)
+    save_TicketForm = saveTicketForm(request.POST or None)
     message = ""
     eventObject = []
     if request.method == "POST":
-        if form.is_valid():
+        if search_form.is_valid():
             apiKey = "Bd9NVuUJf6tdtp7GETrrQvkuMtOVm4fk"
-            city = form.cleaned_data['city']
-            genre = form.cleaned_data['genre']
+            city = search_form.cleaned_data['city']
+            genre = search_form.cleaned_data['genre']
+            state = search_form.cleaned_data['state']
             print(city, genre)
             try:
-                response = requests.get(
-                    "https://app.ticketmaster.com/discovery/v2/events.json?&sort=date,asc&countryCode=US&city=" + city + "&classificationName=" + genre + "&apikey=" + apiKey)
-                data = response.json()
-                # print(data)
+                data = {}
+                try:
+                    response = requests.get(
+                    "https://app.ticketmaster.com/discovery/v2/events.json?&sort=date,asc&countryCode=US&stateCode="+state+"&city=" + city + "&classificationName=" + genre + "&apikey=" + apiKey)
+                    data = response.json()
+                    if "_embedded" not in data:
+                        message = "Events Not found Try different parameters"
+                except :
+                    message = "Error in the query attempt"
+                #print(data)
                 event_imageUrl = ""
+                message= str(len(data["_embedded"]["events"])) + " Events Found"
                 for event in data["_embedded"]["events"]:
                     for image in event["images"]:
                         if (image["width"] == 2048 and image["height"] == 1152):
                             event_imageUrl = image["url"]
                     event_name = event["name"]
+                    ticket_data = event
                     theater_name = event["_embedded"]["venues"][0]["name"]
                     theater_address1 = event["_embedded"]["venues"][0]["address"]["line1"]
                     theater_city = event["_embedded"]["venues"][0]["city"]["name"]
@@ -42,8 +53,8 @@ def search(request):
                             event_dateTime = datetime.fromisoformat(event_dateTimeString)
                             event_ConvertedDate = event_dateTime.strftime("%a %b %d, %Y")
                             event_ConvertedTime = event_dateTime.strftime("%I:%M %p")
-                        except ValueError:
-                            print(ValueError)
+                        except Exception as d:
+                            print(d)
                     else:
                         event_ConvertedDate =""
                         event_ConvertedTime=""
@@ -60,15 +71,21 @@ def search(request):
                         "event_imageUrl": event_imageUrl,
                         "event_ConvertedDate": event_ConvertedDate,
                         "event_ConvertedTime": event_ConvertedTime,
+                        "ticket_data":ticket_data,
                     }
                     eventObject.append(ticket)
 
-            except:
-                print("No results found")
-                message = ""
+            except Exception as e:
+                print("Exception: ", e)
+       # if(save_TicketForm.is_valid()):
+
     context = {
-        'form': form,
+        'search_form': search_form,
         'tickets': eventObject,
         'message': message
     }
     return render(request, 'ticketmasterhtml.html', context)
+
+def SavedTicket(request):
+
+    return render(request, 'savedTickets.html')

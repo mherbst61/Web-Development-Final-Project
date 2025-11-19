@@ -1,6 +1,8 @@
+from random import choices
+
 from django import forms
 
-from TicketFinder.models import Search
+from TicketFinder.models import Search, save_Ticket
 
 
 class ticketSearchForm(forms.ModelForm):
@@ -8,14 +10,25 @@ class ticketSearchForm(forms.ModelForm):
         model = Search
         fields = '__all__'
         widgets = {
+            'state':forms.Select(attrs={
+                    'class':'form-control',
+            }),
             'genre':forms.TextInput(attrs={
-                'class':'form-control',
+                'class':'form-control w-25',
                 'placeholder':'Type to search by genre',
                 'list': 'datalistOptions'
         }),
             'city':forms.TextInput(attrs={
-                'class':'form-control',
+                'class':'form-control w-25',
                 'placeholder':'Enter a city e.g., Hartford',
             })
 
+        }
+
+class saveTicketForm(forms.ModelForm):
+    class Meta:
+        model = save_Ticket
+        fields = '__all__'
+        widgets = {
+            'ticketData':forms.JSONField
         }
