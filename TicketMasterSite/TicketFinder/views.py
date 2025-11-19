@@ -1,6 +1,74 @@
+from contextlib import nullcontext
+from datetime import datetime
 from django.shortcuts import render
+import requests
+from bs4 import BeautifulSoup
+
+from TicketFinder.forms import ticketSearchForm
+
 
 # Create your views here.
-def Search(request):
+def search(request):
+    form = ticketSearchForm(request.POST or None)
+    message = ""
+    eventObject = []
+    if request.method == "POST":
+        if form.is_valid():
+            apiKey = "Bd9NVuUJf6tdtp7GETrrQvkuMtOVm4fk"
+            city = form.cleaned_data['city']
+            genre = form.cleaned_data['genre']
+            print(city, genre)
+            try:
+                response = requests.get(
+                    "https://app.ticketmaster.com/discovery/v2/events.json?&sort=date,asc&countryCode=US&city=" + city + "&classificationName=" + genre + "&apikey=" + apiKey)
+                data = response.json()
+                # print(data)
+                event_imageUrl = ""
+                for event in data["_embedded"]["events"]:
+                    for image in event["images"]:
+                        if (image["width"] == 2048 and image["height"] == 1152):
+                            event_imageUrl = image["url"]
+                    event_name = event["name"]
+                    theater_name = event["_embedded"]["venues"][0]["name"]
+                    theater_address1 = event["_embedded"]["venues"][0]["address"]["line1"]
+                    theater_city = event["_embedded"]["venues"][0]["city"]["name"]
+                    theater_state = event["_embedded"]["venues"][0]["state"]["name"]
+                    theater_zip = event["_embedded"]["venues"][0]["postalCode"]
+                    theater_address2 = theater_city + ", " + theater_state + ", " + theater_zip
+                    event_url = event["url"]
+                    event_dateTimeString = event["dates"]["start"]["dateTime"]
+                    if (event_dateTimeString or event_dateTimeString == ""):
+                        try:
+                            event_dateTime = datetime.fromisoformat(event_dateTimeString)
+                            event_ConvertedDate = event_dateTime.strftime("%a %b %d, %Y")
+                            event_ConvertedTime = event_dateTime.strftime("%I:%M %p")
+                        except ValueError:
+                            print(ValueError)
+                    else:
+                        event_ConvertedDate =""
+                        event_ConvertedTime=""
 
-    return render(request,'ticketmasterhtml.html')
+                #print(event_name)
+                #print(event_dateTime)
+                #print("Converted Date and time: " + event_ConvertedDate + " " + event_ConvertedTime)
+                    ticket = {
+                        "event_name": event_name,
+                        "event_url": event_url,
+                        "theater_name": theater_name,
+                        "theater_address1": theater_address1,
+                        "theater_address2": theater_address2,
+                        "event_imageUrl": event_imageUrl,
+                        "event_ConvertedDate": event_ConvertedDate,
+                        "event_ConvertedTime": event_ConvertedTime,
+                    }
+                    eventObject.append(ticket)
+
+            except:
+                print("No results found")
+                message = ""
+    context = {
+        'form': form,
+        'tickets': eventObject,
+        'message': message
+    }
+    return render(request, 'ticketmasterhtml.html', context)
