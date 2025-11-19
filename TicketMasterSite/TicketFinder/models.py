@@ -62,4 +62,5 @@ class Search(models.Model):
     city = models.CharField(max_length=100)
 
 class save_Ticket(models.Model):
-    data = JSONField()
+    event_name = models.CharField(max_length=255, blank=True, null=True)
+    event_url = models.URLField(max_length=255, blank=True, null=True)

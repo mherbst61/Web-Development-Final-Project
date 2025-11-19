@@ -24,11 +24,3 @@ class ticketSearchForm(forms.ModelForm):
             })
 
         }
-
-class saveTicketForm(forms.ModelForm):
-    class Meta:
-        model = save_Ticket
-        fields = '__all__'
-        widgets = {
-            'ticketData':forms.JSONField
-        }

@@ -69,9 +69,10 @@
                 <p class="text-primary-emphasis fw-bold fs-4">{{ ticket.event_ConvertedTime }}</p>
                 <a type="button" class="btn btn-outline-primary" href={{ ticket.event_url }} target="_blank"><i
                         class="bi bi-ticket-detailed-fill"></i> View Ticket</a>
-                <form>
+                <form action="{% url 'savedTickets' %}" method="post">
                     {% csrf_token %}
-                    <!-- {#  #}{ save_TicketForm.ticketData value ={#  #}{ticket.ticket_data}} }} -->
+                    <!-- {#  #}{ save_TicketForm.ticketData value ={#  #}{ticket.ticket_id}} }} -->
+                    <input type="hidden" name="event_name" value="{{ ticket.event_name  }}">
                     <button type="submit" class="btn btn-outline-primary mt-2"><i class="bi bi-save"></i> Save Ticket</button>
                 </form>
             </div>

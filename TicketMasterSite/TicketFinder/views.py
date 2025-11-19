@@ -4,14 +4,14 @@ from django.shortcuts import render
 import requests
 from bs4 import BeautifulSoup
 
-from TicketFinder.forms import ticketSearchForm, saveTicketForm
+from TicketFinder.forms import ticketSearchForm
 from TicketFinder.models import save_Ticket
+
 
 
 # Create your views here.
 def search(request):
     search_form = ticketSearchForm(request.POST or None)
-    save_TicketForm = saveTicketForm(request.POST or None)
     message = ""
     eventObject = []
     if request.method == "POST":
@@ -39,7 +39,7 @@ def search(request):
                         if (image["width"] == 2048 and image["height"] == 1152):
                             event_imageUrl = image["url"]
                     event_name = event["name"]
-                    ticket_data = event
+                    ticket_id = event["id"]
                     theater_name = event["_embedded"]["venues"][0]["name"]
                     theater_address1 = event["_embedded"]["venues"][0]["address"]["line1"]
                     theater_city = event["_embedded"]["venues"][0]["city"]["name"]
@@ -71,7 +71,7 @@ def search(request):
                         "event_imageUrl": event_imageUrl,
                         "event_ConvertedDate": event_ConvertedDate,
                         "event_ConvertedTime": event_ConvertedTime,
-                        "ticket_data":ticket_data,
+                        "ticket_id":ticket_id,
                     }
                     eventObject.append(ticket)
 
@@ -87,5 +87,8 @@ def search(request):
     return render(request, 'ticketmasterhtml.html', context)
 
 def SavedTicket(request):
-
+    if request.method == "POST":
+        eventName= request.POST["event_name"]
+        print(eventName)
+        save_Ticket.objects.create(event_name=eventName)
     return render(request, 'savedTickets.html')
