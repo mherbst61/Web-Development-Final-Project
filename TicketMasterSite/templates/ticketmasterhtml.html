@@ -52,17 +52,17 @@
     {% for ticket in tickets %}
         <div class="row h-4 shadow-lg p-3 mb-5 bg-body-tertiary rounded">
             <div class="col-lg-4 col-12">
-                <img src="{{ img }}" class="img-fluid rounded" alt="event-img"/>
+                <img src="{{ ticket.event_imageUrl }}" class="img-fluid rounded" alt="event-img"/>
             </div>
             <div class="col-lg-4 col-6 mt-lg-0 mt-3">
                 <p class="fs-4">{{ ticket.event_name }}</p>
-                <p class="fs-5"><i class="bi bi-geo-alt-fill"></i> {{ theaterName }}</p>
+                <p class="fs-5"><i class="bi bi-geo-alt-fill"></i> {{ ticket.theater_name }}</p>
                 <p></p>
-                <p>{{ address1 }}<br>{{ address2 }}</p>
+                <p>{{ ticket.theater_address1 }}<br>{{ ticket.theater_address2 }}</p>
             </div>
             <div class="col-lg-4 col-6 mt-lg-0 mt-3 text-end text-primary-emphasis">
-                <p class="text-primary-emphasis fw-bold fs-5">{{ date }}</p>
-                <p class="text-primary-emphasis fw-bold fs-4">{{ time }}</p>
+                <p class="text-primary-emphasis fw-bold fs-5">{{ ticket.event_ConvertedDate }}</p>
+                <p class="text-primary-emphasis fw-bold fs-4">{{ ticket.event_ConvertedTime }}</p>
                 <a type="button" class="btn btn-outline-primary" href={{ ticket.event_url }} target="_blank"><i
                         class="bi bi-ticket-detailed-fill"></i> Find Tickets</a>
             </div>
