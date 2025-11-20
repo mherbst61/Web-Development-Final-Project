@@ -2,7 +2,7 @@ from random import choices
 
 from django import forms
 
-from TicketFinder.models import Search, save_Ticket
+from TicketFinder.models import Search, SavedTickets
 
 
 class ticketSearchForm(forms.ModelForm):

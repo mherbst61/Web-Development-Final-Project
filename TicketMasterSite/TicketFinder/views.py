@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from TicketFinder.forms import ticketSearchForm
-from TicketFinder.models import save_Ticket
+from TicketFinder.models import SavedTickets
 
 
 
@@ -110,12 +110,17 @@ def SavedTicket(request):
         print(event_ConvertedTime)
         ticket_id= request.POST["ticket_id"]
         print(ticket_id)
-        save_Ticket.objects.create(event_name=event_name, event_url=event_url, theater_name=theater_name,theater_address1=theater_address1,theater_address2=theater_address2,event_imageUrl=event_imageUrl,event_ConvertedDate=event_ConvertedDate,event_ConvertedTime=event_ConvertedTime,ticket_id=ticket_id)
+        SavedTickets.objects.create(event_name=event_name, event_url=event_url, theater_name=theater_name,theater_address1=theater_address1,theater_address2=theater_address2,event_imageUrl=event_imageUrl,event_ConvertedDate=event_ConvertedDate,event_ConvertedTime=event_ConvertedTime,ticket_id=ticket_id)
         return JsonResponse({"message":"Ticket Saved"})
     return JsonResponse({"message":"Error Ticket Not saved"})
 
 
 def loadTickets(request):
-    ticket = save_Ticket.objects.all()
+    ticket = SavedTickets.objects.all()
     context = {'tickets': ticket}
-    return render(request, 'savedTickets.html', context)
+    return render(request, 'load_saved tickets.html', context)
+
+def deleteTicket(request, ticket_id):
+    ticket = SavedTickets.objects.get(id=request.POST["ticket_id"])
+    ticket.delete()
+    return JsonResponse({"message":"Ticket Deleted"})

@@ -61,7 +61,9 @@ class Search(models.Model):
     genre = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
 
-class save_Ticket(models.Model):
+
+
+class SavedTickets(models.Model):
     event_name = models.CharField(max_length=100, blank=True, null=True)
     event_url = models.URLField(blank=True, null=True)
     theater_name = models.CharField(max_length=100, blank=True, null=True)
