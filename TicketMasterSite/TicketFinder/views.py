@@ -1,6 +1,9 @@
 from contextlib import nullcontext
 from datetime import datetime
-from django.shortcuts import render
+
+from django.contrib import messages
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
 import requests
 from bs4 import BeautifulSoup
 
@@ -105,7 +108,11 @@ def SavedTicket(request):
         event_ConvertedTime= request.POST["event_ConvertedTime"]
         print(event_ConvertedTime)
         save_Ticket.objects.create(event_name=event_name, event_url=event_url, theater_name=theater_name,theater_address1=theater_address1,theater_address2=theater_address2,event_imageUrl=event_imageUrl,event_ConvertedDate=event_ConvertedDate,event_ConvertedTime=event_ConvertedTime)
-    return render(request, 'savedTickets.html')
+        messages.success(request, "Ticket Saved Successfully!")
+
+    return JsonResponse(request)
+
+
 
 def loadTickets(request):
     ticket = save_Ticket.objects.all()

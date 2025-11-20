@@ -69,7 +69,7 @@
                 <p class="text-primary-emphasis fw-bold fs-4">{{ ticket.event_ConvertedTime }}</p>
                 <a type="button" class="btn btn-outline-primary" href={{ ticket.event_url }} target="_blank"><i
                         class="bi bi-ticket-detailed-fill"></i> View Ticket</a>
-                <form action="{% url 'savedTickets' %}" method="post">
+                <form id="save_ticket_form" action="" method="post">
                     {% csrf_token %}
                     <!-- {#  #}{ save_TicketForm.ticketData value ={#  #}{ticket.ticket_id}} }} -->
                     <input type="hidden" name="event_name" value="{{ ticket.event_name  }}">
@@ -88,6 +88,42 @@
     {% endfor %}
 
     </div>
+    <script>
+        //https://sentry.io/answers/how-to-submit-an-ajax-form-using-jquery
+        $('form').submit(function (e) {
+  e.preventDefault();
+  const data = {
+const EVENT_NAME = $('#event_name').val();
+const EVENT_URL = $('#event_url').val();
+const THEATER_NAME = $('#theater_name').val();
+const THEATER_ADDRESS1 = $('#theater_address1').val();
+const THEATER_ADDRESS2 = $('#theater_address2').val();
+const EVENT_IMAGE_URL = $('#event_imageUrl').val();
+const EVENT_CONVERTED_DATE = $('#event_ConvertedDate').val();
+const EVENT_CONVERTED_TIME = $('#event_ConvertedTime').val();
+const TICKET_ID = $('#ticket_id').val();
+
+  };
+
+  $.ajax({
+    type: 'POST',
+    url: '{% url 'savedTickets' %}',
+    data: JSON.stringify(data),
+    contentType: 'application/json',
+  })
+    .done((data) => {
+      console.log({ data });
+    })
+    .fail((err) => {
+      console.error(err);
+    })
+    .always(() => {
+      console.log('always called');
+    });
+});
+});
+    </script>
+
 
     {% block body %}
     {% endblock %}
