@@ -121,6 +121,10 @@ def loadTickets(request):
     return render(request, 'load_saved tickets.html', context)
 
 def deleteTicket(request, ticket_id):
-    ticket = SavedTickets.objects.get(id=request.POST["ticket_id"])
-    ticket.delete()
-    return JsonResponse({"message":"Ticket Deleted"})
+    print("from delete ticket",request)
+    if SavedTickets.objects.filter(ticket_id=ticket_id).exists():
+        ticket = SavedTickets.objects.get(ticket_id=ticket_id)
+        ticket.delete()
+        return JsonResponse({'deleted':True,'message':'Ticket Deleted'})
+    else:
+        return JsonResponse({'deleted':False,'message':'Ticket Not saved'})
