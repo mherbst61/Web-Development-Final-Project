@@ -73,6 +73,14 @@
                     {% csrf_token %}
                     <!-- {#  #}{ save_TicketForm.ticketData value ={#  #}{ticket.ticket_id}} }} -->
                     <input type="hidden" name="event_name" value="{{ ticket.event_name  }}">
+                    <input type="hidden" name="event_url" value="{{ ticket.event_url  }}">
+                    <input type="hidden" name="theater_name" value="{{ ticket.theater_name  }}">
+                    <input type="hidden" name="theater_address1" value="{{ ticket.theater_address1  }}">
+                    <input type="hidden" name="theater_address2" value="{{ ticket.theater_address2  }}">
+                    <input type="hidden" name="event_imageUrl" value="{{ ticket.event_imageUrl  }}">
+                    <input type="hidden" name="event_ConvertedDate" value="{{ ticket.event_ConvertedDate  }}">
+                    <input type="hidden" name="event_ConvertedTime" value="{{ ticket.event_ConvertedTime  }}">
+                    <input type="hidden" name="ticket_id" value="{{ ticket.ticket_id  }}">
                     <button type="submit" class="btn btn-outline-primary mt-2"><i class="bi bi-save"></i> Save Ticket</button>
                 </form>
             </div>

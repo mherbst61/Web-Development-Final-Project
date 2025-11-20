@@ -88,7 +88,26 @@ def search(request):
 
 def SavedTicket(request):
     if request.method == "POST":
-        eventName= request.POST["event_name"]
-        print(eventName)
-        save_Ticket.objects.create(event_name=eventName)
+        event_name= request.POST["event_name"]
+        print(event_name)
+        event_url= request.POST["event_url"]
+        print(event_url)
+        theater_name= request.POST["theater_name"]
+        print(theater_name)
+        theater_address1 = request.POST["theater_address1"]
+        print(theater_address1)
+        theater_address2 = request.POST["theater_address2"]
+        print(theater_address2)
+        event_imageUrl= request.POST["event_imageUrl"]
+        print(event_imageUrl)
+        event_ConvertedDate= request.POST["event_ConvertedDate"]
+        print(event_ConvertedDate)
+        event_ConvertedTime= request.POST["event_ConvertedTime"]
+        print(event_ConvertedTime)
+        save_Ticket.objects.create(event_name=event_name, event_url=event_url, theater_name=theater_name,theater_address1=theater_address1,theater_address2=theater_address2,event_imageUrl=event_imageUrl,event_ConvertedDate=event_ConvertedDate,event_ConvertedTime=event_ConvertedTime)
     return render(request, 'savedTickets.html')
+
+def loadTickets(request):
+    ticket = save_Ticket.objects.all()
+    context = {'tickets': ticket}
+    return render(request, 'savedTickets.html', context)
