@@ -70,3 +70,4 @@ class save_Ticket(models.Model):
     event_imageUrl = models.URLField(blank=True, null=True)
     event_ConvertedDate = models.CharField(max_length=100, blank=True, null=True)
     event_ConvertedTime = models.CharField(max_length=100, blank=True, null=True)
+    ticket_id = models.CharField(max_length=100, blank=True, null=True)

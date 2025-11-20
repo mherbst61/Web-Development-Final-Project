@@ -69,64 +69,109 @@
                 <p class="text-primary-emphasis fw-bold fs-4">{{ ticket.event_ConvertedTime }}</p>
                 <a type="button" class="btn btn-outline-primary" href={{ ticket.event_url }} target="_blank"><i
                         class="bi bi-ticket-detailed-fill"></i> View Ticket</a>
-                <form id="save_ticket_form" action="" method="post">
-                    {% csrf_token %}
-                    <!-- {#  #}{ save_TicketForm.ticketData value ={#  #}{ticket.ticket_id}} }} -->
-                    <input type="hidden" name="event_name" value="{{ ticket.event_name  }}">
-                    <input type="hidden" name="event_url" value="{{ ticket.event_url  }}">
-                    <input type="hidden" name="theater_name" value="{{ ticket.theater_name  }}">
-                    <input type="hidden" name="theater_address1" value="{{ ticket.theater_address1  }}">
-                    <input type="hidden" name="theater_address2" value="{{ ticket.theater_address2  }}">
-                    <input type="hidden" name="event_imageUrl" value="{{ ticket.event_imageUrl  }}">
-                    <input type="hidden" name="event_ConvertedDate" value="{{ ticket.event_ConvertedDate  }}">
-                    <input type="hidden" name="event_ConvertedTime" value="{{ ticket.event_ConvertedTime  }}">
-                    <input type="hidden" name="ticket_id" value="{{ ticket.ticket_id  }}">
-                    <button type="submit" class="btn btn-outline-primary mt-2"><i class="bi bi-save"></i> Save Ticket</button>
-                </form>
+                <!--  <input type="hidden" id="event_name" name="event_name" value="{ ticket.event_name  }}">
+                <input type="hidden" id="event_url" name="event_url" value="{ ticket.event_url  }}">
+                <input type="hidden" id="theater_name" name="theater_name" value="{ ticket.theater_name  }}">
+                <input type="hidden" id="theater_address1" name="theater_address1" value="{ ticket.theater_address1  }}">
+                <input type="hidden" id="theater_address2" name="theater_address2" value="{ ticket.theater_address2  }}">
+                <input type="hidden" id="event_imageUrl" name="event_imageUrl" value="{ ticket.event_imageUrl  }}">
+                <input type="hidden" id="event_ConvertedDate" name="event_ConvertedDate" value="{ ticket.event_ConvertedDate  }}">
+                <input type="hidden" id="event_ConvertedTime" name="event_ConvertedTime" value="{ ticket.event_ConvertedTime  }}">
+                <input type="hidden" id="ticket_id" name="ticket_id" value="{ ticket.ticket_id  }"> -->
+
+                <button onclick="saveTicket('{{ ticket.event_name }}','{{ ticket.event_url  }}','{{ ticket.theater_name  }}','{{ ticket.theater_address1  }}','{{ ticket.theater_address2  }}','{{ ticket.event_imageUrl  }}','{{ ticket.event_ConvertedDate  }}','{{ ticket.event_ConvertedTime  }}','{{ ticket.ticket_id  }}')" id="saveButton" class="btn btn-outline-primary"><i class="bi bi-save"></i> Save Ticket</button>
             </div>
         </div>
     {% endfor %}
 
     </div>
-    <script>
-        //https://sentry.io/answers/how-to-submit-an-ajax-form-using-jquery
-        $('form').submit(function (e) {
-  e.preventDefault();
-  const data = {
-const EVENT_NAME = $('#event_name').val();
-const EVENT_URL = $('#event_url').val();
-const THEATER_NAME = $('#theater_name').val();
-const THEATER_ADDRESS1 = $('#theater_address1').val();
-const THEATER_ADDRESS2 = $('#theater_address2').val();
-const EVENT_IMAGE_URL = $('#event_imageUrl').val();
-const EVENT_CONVERTED_DATE = $('#event_ConvertedDate').val();
-const EVENT_CONVERTED_TIME = $('#event_ConvertedTime').val();
-const TICKET_ID = $('#ticket_id').val();
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script>
+    //https://sentry.io/answers/how-to-submit-an-ajax-form-using-jquery
 
-  };
+   // savebutton= document.getElementById("saveButton");
+  //  savebutton.addEventListener("click", saveTicket)
+    function saveTicket(eventName,eventUrl,theaterName,theaterAddress1,theaterAddress2,eventImageUrl,eventConvertedDate,eventConvertedTime,ticketId){
+        console.log("Save ticket ran")
 
-  $.ajax({
-    type: 'POST',
-    url: '{% url 'savedTickets' %}',
-    data: JSON.stringify(data),
-    contentType: 'application/json',
-  })
-    .done((data) => {
-      console.log({ data });
-    })
-    .fail((err) => {
-      console.error(err);
-    })
-    .always(() => {
-      console.log('always called');
-    });
+
+        $.ajax({
+            type: 'POST',
+            url: {% url 'savedTickets' %},
+            data: {
+                event_name: eventName,
+            event_url: eventUrl,
+            theater_name: theaterName,
+            theater_address1: theaterAddress1,
+            theater_address2: theaterAddress2,
+            event_imageUrl: eventImageUrl,
+            event_ConvertedDate: eventConvertedDate,
+            event_ConvertedTime: eventConvertedTime,
+            ticket_id: ticketId,
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+        })
+            .done((data) => {
+                alert("Ticket saved");
+            })
+            .fail((err) => {
+                alert("Ticket Failed to save: ",err);
+            })
+    }
+
+
+    /*
+    $('#save_ticket_form').submit(function (e) {
+        console.log("AJAX CALLED")
+e.preventDefault();
+const data = {
+EVENT_NAME: $('#event_name').val(),
+EVENT_URL: $('#event_url').val(),
+THEATER_NAME: $('#theater_name').val(),
+THEATER_ADDRESS1: $('#theater_address1').val(),
+THEATER_ADDRESS2: $('#theater_address2').val(),
+EVENT_IMAGE_URL: $('#event_imageUrl').val(),
+EVENT_CONVERTED_DATE: $('#event_ConvertedDate').val(),
+EVENT_CONVERTED_TIME: $('#event_ConvertedTime').val(),
+TICKET_ID: $('#ticket_id').val()
+};
+
+$.ajax({
+type: 'POST',
+url: '',
+data: JSON.stringify(data),
+contentType: 'application/json',
+})
+.done((data) => {
+  alert("Ticket saved");
+})
+.fail((err) => {
+  alert("Ticket Failed to save: ",err);
+})
+.always(() => {
+  console.log('always called');
 });
 });
-    </script>
+
+From html  button
+                    data-url="{ url 'savedTickets' %}"
+                    data-event_name="{ ticket.event_name  }}"
+                    data-event_url="{ ticket.event_url  }}"
+                    data-theater_name="{ ticket.theater_name  }}"
+                    data-theater_address1="{ ticket.theater_address1  }}"
+                    data-theater_address2="{ ticket.theater_address2  }}"
+                    data-event_imageUrl="{ ticket.event_imageUrl  }}"
+                    data-event_ConvertedDate ="{ ticket.event_ConvertedDate  }}"
+                    data-event_ConvertedTime="{ ticket.event_ConvertedTime  }}"
+                    data-ticket_id="{ ticket.ticket_id  }}"
+
+*/
+</script>
 
 
-    {% block body %}
-    {% endblock %}
+{% block body %}
+{% endblock %}
 
 </body>
 </html>

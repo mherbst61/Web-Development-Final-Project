@@ -91,6 +91,7 @@ def search(request):
 
 def SavedTicket(request):
     if request.method == "POST":
+        print("save called")
         event_name= request.POST["event_name"]
         print(event_name)
         event_url= request.POST["event_url"]
@@ -107,11 +108,11 @@ def SavedTicket(request):
         print(event_ConvertedDate)
         event_ConvertedTime= request.POST["event_ConvertedTime"]
         print(event_ConvertedTime)
-        save_Ticket.objects.create(event_name=event_name, event_url=event_url, theater_name=theater_name,theater_address1=theater_address1,theater_address2=theater_address2,event_imageUrl=event_imageUrl,event_ConvertedDate=event_ConvertedDate,event_ConvertedTime=event_ConvertedTime)
-        messages.success(request, "Ticket Saved Successfully!")
-
-    return JsonResponse(request)
-
+        ticket_id= request.POST["ticket_id"]
+        print(ticket_id)
+        save_Ticket.objects.create(event_name=event_name, event_url=event_url, theater_name=theater_name,theater_address1=theater_address1,theater_address2=theater_address2,event_imageUrl=event_imageUrl,event_ConvertedDate=event_ConvertedDate,event_ConvertedTime=event_ConvertedTime,ticket_id=ticket_id)
+        return JsonResponse({"message":"Ticket Saved"})
+    return JsonResponse({"message":"Error Ticket Not saved"})
 
 
 def loadTickets(request):
