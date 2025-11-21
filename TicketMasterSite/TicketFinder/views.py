@@ -13,6 +13,20 @@ from TicketFinder.models import SavedTickets
 
 
 # Create your views here.
+
+#Home Page launch
+def launchHomePage(request):
+    return render(request, 'home.html')
+
+
+#launches the search page with the form
+def searchPage(request):
+    searchForm = ticketSearchForm()
+    context = {'search_form': searchForm}
+    return render(request, 'ticketmasterhtml.html',context)
+
+
+#handles a search from ajax on the search page
 def search(request):
     search_form = ticketSearchForm(request.POST or None)
     message = ""
@@ -89,6 +103,7 @@ def search(request):
     }
     return render(request, 'ticketmasterhtml.html', context)
 
+#Saves a ticket
 def SavedTicket(request):
     if request.method == "POST":
         print("save called")
@@ -110,16 +125,24 @@ def SavedTicket(request):
         print(event_ConvertedTime)
         ticket_id= request.POST["ticket_id"]
         print(ticket_id)
-        SavedTickets.objects.create(event_name=event_name, event_url=event_url, theater_name=theater_name,theater_address1=theater_address1,theater_address2=theater_address2,event_imageUrl=event_imageUrl,event_ConvertedDate=event_ConvertedDate,event_ConvertedTime=event_ConvertedTime,ticket_id=ticket_id)
-        return JsonResponse({"message":"Ticket Saved"})
+        if SavedTickets.objects.filter(ticket_id=ticket_id).exists():
+            print("Ticket Already Saved if")
+            return JsonResponse({"message": "Ticket Already Saved "})
+        else:
+            print("Ticket Saved if")
+            SavedTickets.objects.create(event_name=event_name, event_url=event_url, theater_name=theater_name,theater_address1=theater_address1,theater_address2=theater_address2,event_imageUrl=event_imageUrl,event_ConvertedDate=event_ConvertedDate,event_ConvertedTime=event_ConvertedTime,ticket_id=ticket_id)
+            return JsonResponse({"message":"Ticket Saved"})
+
     return JsonResponse({"message":"Error Ticket Not saved"})
 
-
+#Loads tickets on the saved tickets page from the database
 def loadTickets(request):
     ticket = SavedTickets.objects.all()
-    context = {'tickets': ticket}
+    message_count = int(ticket.count())
+    context = {'tickets': ticket,'message_count': message_count}
     return render(request, 'load_saved tickets.html', context)
 
+#Deletes a ticket from the database
 def deleteTicket(request, ticket_id):
     print("from delete ticket",request)
     if SavedTickets.objects.filter(ticket_id=ticket_id).exists():

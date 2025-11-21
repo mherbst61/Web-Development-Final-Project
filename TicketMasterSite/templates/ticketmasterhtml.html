@@ -11,14 +11,20 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" >
     <div class="container">
   <a class="navbar-brand" href="#">TicketFinder</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <div class="navbar-nav">
-      <a class="nav-item nav-link" href="#">Home</a>
-      <a class="nav-item nav-link active" href="#">Search <span class="sr-only">(current)</span></a>
+        <li class="nav-item">
+      <a class="nav-item nav-link" href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="nav-item">
+      <a class="nav-item nav-link active" href="{% url 'searchPage' %}">Search <span class="sr-only">(current)</span></a>
+        </li>
+            <li class="nav-item">
       <a class="nav-item nav-link" href="{% url 'loadTickets' %}">Saved Tickets</a>
+       </li>
     </div>
   </div>
     </div>
@@ -26,7 +32,7 @@
 
 <div class="topBar bg-dark p-lg-5 p-0 mb-3">
     <div class="text-center text-light container-fluid" id="topText">
-        <p class="fs-1">Ticketmaster</p>
+        <p class="fs-1">Ticketmaster Search</p>
         <p class="fs-3 fw-bold">Quickly Find tickets around you</p>
     </div>
     <div>
@@ -125,7 +131,7 @@
             },
         })
             .done((data) => {
-                alert("Ticket saved");
+                alert(data.message);
             })
             .fail((err) => {
                 alert("Ticket Failed to save: ",err);
