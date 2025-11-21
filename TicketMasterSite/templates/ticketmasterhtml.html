@@ -8,6 +8,22 @@
     {% bootstrap_javascript %}
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" >
+    <div class="container">
+  <a class="navbar-brand" href="#">TicketFinder</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" href="#">Home</a>
+      <a class="nav-item nav-link active" href="#">Search <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="{% url 'loadTickets' %}">Saved Tickets</a>
+    </div>
+  </div>
+    </div>
+</nav>
+
 <div class="topBar bg-dark p-lg-5 p-0 mb-3">
     <div class="text-center text-light container-fluid" id="topText">
         <p class="fs-1">Ticketmaster</p>
@@ -88,10 +104,6 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script>
-    //https://sentry.io/answers/how-to-submit-an-ajax-form-using-jquery
-
-   // savebutton= document.getElementById("saveButton");
-  //  savebutton.addEventListener("click", saveTicket)
     function saveTicket(eventName,eventUrl,theaterName,theaterAddress1,theaterAddress2,eventImageUrl,eventConvertedDate,eventConvertedTime,ticketId){
         console.log("Save ticket ran")
 
@@ -120,53 +132,6 @@
             })
     }
 
-
-    /*
-    $('#save_ticket_form').submit(function (e) {
-        console.log("AJAX CALLED")
-e.preventDefault();
-const data = {
-EVENT_NAME: $('#event_name').val(),
-EVENT_URL: $('#event_url').val(),
-THEATER_NAME: $('#theater_name').val(),
-THEATER_ADDRESS1: $('#theater_address1').val(),
-THEATER_ADDRESS2: $('#theater_address2').val(),
-EVENT_IMAGE_URL: $('#event_imageUrl').val(),
-EVENT_CONVERTED_DATE: $('#event_ConvertedDate').val(),
-EVENT_CONVERTED_TIME: $('#event_ConvertedTime').val(),
-TICKET_ID: $('#ticket_id').val()
-};
-
-$.ajax({
-type: 'POST',
-url: '',
-data: JSON.stringify(data),
-contentType: 'application/json',
-})
-.done((data) => {
-  alert("Ticket saved");
-})
-.fail((err) => {
-  alert("Ticket Failed to save: ",err);
-})
-.always(() => {
-  console.log('always called');
-});
-});
-
-From html  button
-                    data-url="{ url 'savedTickets' %}"
-                    data-event_name="{ ticket.event_name  }}"
-                    data-event_url="{ ticket.event_url  }}"
-                    data-theater_name="{ ticket.theater_name  }}"
-                    data-theater_address1="{ ticket.theater_address1  }}"
-                    data-theater_address2="{ ticket.theater_address2  }}"
-                    data-event_imageUrl="{ ticket.event_imageUrl  }}"
-                    data-event_ConvertedDate ="{ ticket.event_ConvertedDate  }}"
-                    data-event_ConvertedTime="{ ticket.event_ConvertedTime  }}"
-                    data-ticket_id="{ ticket.ticket_id  }}"
-
-*/
 </script>
 
 
