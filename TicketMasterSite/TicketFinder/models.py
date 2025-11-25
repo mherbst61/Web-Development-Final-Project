@@ -73,3 +73,7 @@ class SavedTickets(models.Model):
     event_ConvertedDate = models.CharField(max_length=100, blank=True, null=True)
     event_ConvertedTime = models.CharField(max_length=100, blank=True, null=True)
     ticket_id = models.CharField(max_length=100, blank=True, null=True)
+
+class Notes (models.Model):
+    title = models.CharField(max_length=100)
+    note = models.TextField()

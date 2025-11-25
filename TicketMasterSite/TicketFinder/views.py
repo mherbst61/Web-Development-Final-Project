@@ -8,15 +8,20 @@ import requests
 from bs4 import BeautifulSoup
 
 from TicketFinder.forms import ticketSearchForm
-from TicketFinder.models import SavedTickets
-
+from TicketFinder.models import SavedTickets, Search
 
 
 # Create your views here.
 
 #Home Page launch
 def launchHomePage(request):
-    return render(request, 'home.html')
+    savedTickets=SavedTickets.objects.all()
+    savedTicketsCount=int(savedTickets.count())
+
+
+
+    context = {'savedTicketsCount': savedTicketsCount}
+    return render(request, 'home.html',context)
 
 
 #launches the search page with the form
@@ -151,3 +156,7 @@ def deleteTicket(request, ticket_id):
         return JsonResponse({'deleted':True,'message':'Ticket Deleted'})
     else:
         return JsonResponse({'deleted':False,'message':'Ticket Not saved'})
+
+def createNewNote(request):
+
+    return render(request, 'newNote.html')

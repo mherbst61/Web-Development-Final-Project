@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Note</title>
+        {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body>
+<div class="topBar bg-dark p-lg-5 p-0 mb-3">
+    <div class="text-center text-light container-fluid" id="topText">
+        <p class="fs-1">Create a new note!</p>
+              <button class="btn btn-primary">Save New Note</button>
+                <button class="btn btn-primary" onclick="clearText()">Clear Text</button>
+                <a class="btn btn-danger" href="{% url 'home' %}">Cancel</a>
+            </div>
+        </div>
+    </div>
+    </div>
+        <div class="row h-4 shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+            <div class="col-12 mb-2">
+                <label class="mb-1">Title:</label>
+                <input class="form-control" placeholder="Enter title for note">
+            </div>
+            <div class="col-12">
+                <label class="mb-1">Note:</label>
+                <textarea rows="20" id="noteArea" class="form-control" placeholder="Enter your note"></textarea>
+            </div>
+        </div>
+<script>
+    function clearText(){
+        noteArea=document.getElementById("noteArea");
+        noteArea.value = "";
+    }
+</script>
+
+</body>
+</html>

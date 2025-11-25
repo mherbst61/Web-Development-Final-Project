@@ -7,7 +7,7 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 </head>
-<body onload="ticketValMessage()">
+<body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" >
     <div class="container">
   <a class="navbar-brand" href="#">TicketFinder</a>
@@ -39,7 +39,29 @@
     <div>
     </div>
 </div>
+<div class="container shadow-lg p-lg-5 pt-3">
+    <div class="row">
+    <div class="col-12 text-center">
+        <h1 class="">Saved Tickets:</h1>
+        <p class="fs-3">{{savedTicketsCount}}</p>
+        <p><hr></p>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-12">
+        <h3 class="d-inline">Notes:</h3>
+        <a type="button" href="{% url 'createNewNote' %}" class="d-inline float-end btn btn-primary">Create Note</a>
+        <p><hr></p>
+    </div>
+        {% for note in notes %}
+        <div class="col-12">
+        <h3>{{ title }}</h3>
+        <p>{{ text }}</p>
+        </div>
+        {% endfor %}
 
+    </div>
 
+</div>
 </body>
 </html>
