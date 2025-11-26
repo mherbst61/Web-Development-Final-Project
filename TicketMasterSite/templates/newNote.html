@@ -8,29 +8,54 @@
     {% bootstrap_javascript %}
 </head>
 <body>
+<p  id="titleImport">{{ Oldtitle }}</p>
+<p id="messageImport">{{ Oldnote }}</p>
+<p id="idOfNoteImport">{{ IdOfNote }}</p>
+<form action="{% url 'createNewNote' %}" method="post">
+    {% csrf_token %}
 <div class="topBar bg-dark p-lg-5 p-0 mb-3">
     <div class="text-center text-light container-fluid" id="topText">
         <p class="fs-1">Create a new note!</p>
-              <button class="btn btn-primary">Save New Note</button>
-                <button class="btn btn-primary" onclick="clearText()">Clear Text</button>
+              <button type="submit" class="btn btn-primary">Save New Note</button>
+                <button type="button" class="btn btn-primary" onclick="clearText()">Clear Text</button>
                 <a class="btn btn-danger" href="{% url 'home' %}">Cancel</a>
             </div>
         </div>
     </div>
     </div>
+
         <div class="row h-4 shadow-lg p-3 mb-5 bg-body-tertiary rounded">
             <div class="col-12 mb-2">
                 <label class="mb-1">Title:</label>
-                <input class="form-control" placeholder="Enter title for note">
+                {{ newNoteForm.title }}
             </div>
             <div class="col-12">
                 <label class="mb-1">Note:</label>
-                <textarea rows="20" id="noteArea" class="form-control" placeholder="Enter your note"></textarea>
+                {{ newNoteForm.note }}
             </div>
         </div>
+</form>
 <script>
+    window.onload = assignValues()
+    function assignValues (){
+        console.log("assignValues ran");
+        const titleArea = document.getElementById("titleArea");
+        const noteArea = document.getElementById("noteArea");
+        const titleImport = document.getElementById("titleImport");
+        const noteImport = document.getElementById("messageImport");
+        if (titleImport.innerText !== ""){
+            let oldTitle = titleImport.innerText
+            let oldNote = noteImport.innerHTML
+            titleArea.value =oldTitle;
+            noteArea.value = oldNote;
+        } else {
+        }
+    }
+
+
     function clearText(){
-        noteArea=document.getElementById("noteArea");
+        console.log("Clear Text clicked");
+        const noteArea = document.getElementById("noteArea");
         noteArea.value = "";
     }
 </script>

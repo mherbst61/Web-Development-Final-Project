@@ -6,10 +6,12 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 import requests
 from bs4 import BeautifulSoup
+from requests import Request
 
 from TicketFinder.forms import ticketSearchForm
-from TicketFinder.models import SavedTickets, Search
-
+from TicketFinder.forms import createNewNoteForm
+from TicketFinder.models import SavedTickets, Search, Notes
+from TicketFinder.models import Notes
 
 # Create your views here.
 
@@ -17,10 +19,10 @@ from TicketFinder.models import SavedTickets, Search
 def launchHomePage(request):
     savedTickets=SavedTickets.objects.all()
     savedTicketsCount=int(savedTickets.count())
+    notes=Notes.objects.all()
 
 
-
-    context = {'savedTicketsCount': savedTicketsCount}
+    context = {'savedTicketsCount': savedTicketsCount, 'notes':notes}
     return render(request, 'home.html',context)
 
 
@@ -158,5 +160,36 @@ def deleteTicket(request, ticket_id):
         return JsonResponse({'deleted':False,'message':'Ticket Not saved'})
 
 def createNewNote(request):
+    newNoteForm = createNewNoteForm(request.POST or None)
+    if request.method == "POST":
+        if newNoteForm.is_valid():
+            title = newNoteForm.cleaned_data['title']
+            note = newNoteForm.cleaned_data['note']
+            Notes.objects.create(title=title, note=note)
+            return redirect('home')
+    context = {
+        'newNoteForm': newNoteForm,
+    }
+    return render(request, 'newNote.html',context)
 
-    return render(request, 'newNote.html')
+def deleteNote(request, note_id):
+    if Notes.objects.filter(id=note_id).exists():
+        note = Notes.objects.get(id=note_id)
+        note.delete()
+        return JsonResponse({'deleted': True, 'message': 'Note Deleted'})
+    else:
+        return JsonResponse({'deleted': False, 'message': 'Note Not saved'})
+
+def updateNote(request, note_id): #Need to add stuff for update still
+    newNoteForm = createNewNoteForm
+    note = Notes.objects.get(id=note_id)
+    Oldtitle = note.title
+    Oldnote= note.note
+    IdOfNote = note.id
+    context = {
+        'newNoteForm': newNoteForm,
+        'Oldtitle': Oldtitle,
+        'Oldnote': Oldnote,
+        'IdOfNote': IdOfNote,
+    }
+    return render(request,'newNote.html',context)

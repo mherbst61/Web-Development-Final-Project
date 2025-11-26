@@ -2,7 +2,7 @@ from random import choices
 
 from django import forms
 
-from TicketFinder.models import Search, SavedTickets
+from TicketFinder.models import Search, SavedTickets, Notes
 
 
 class ticketSearchForm(forms.ModelForm):
@@ -23,4 +23,21 @@ class ticketSearchForm(forms.ModelForm):
                 'placeholder':'Enter a city e.g., Hartford',
             })
 
+        }
+class createNewNoteForm (forms.ModelForm):
+    class Meta:
+        model = Notes
+        fields = '__all__'
+        widgets = {
+        'title':forms.TextInput(attrs={
+        'class' :'form-control',
+        'placeholder':'Enter title for note',
+        'id':'titleArea'
+            }),
+        'note':forms.Textarea(attrs={
+        'rows':'20',
+        'id': 'noteArea',
+        'class': 'form-control',
+        'placeholder':'Enter your note'
+        })
         }

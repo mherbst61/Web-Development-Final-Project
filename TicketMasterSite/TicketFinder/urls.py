@@ -8,4 +8,6 @@ urlpatterns = [
     path('loadTickets/', views.loadTickets, name='loadTickets'),
     path('deleteTicket/<str:ticket_id>/', views.deleteTicket, name='deleteTicket'),
     path('createNewNote/', views.createNewNote, name='createNewNote'),
+    path('deleteNote/<str:note_id>/', views.deleteNote, name='deleteNote'),
+    path('updateNote/<str:note_id>/', views.updateNote, name='updateNote'),
 ]
