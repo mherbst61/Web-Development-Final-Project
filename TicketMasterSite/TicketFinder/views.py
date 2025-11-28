@@ -160,17 +160,13 @@ def deleteTicket(request, ticket_id):
         return JsonResponse({'deleted':False,'message':'Ticket Not saved'})
 
 def createNewNote(request):
-    newNoteForm = createNewNoteForm(request.POST or None)
-    if request.method == "POST":
-        if newNoteForm.is_valid():
-            title = newNoteForm.cleaned_data['title']
-            note = newNoteForm.cleaned_data['note']
-            Notes.objects.create(title=title, note=note)
-            return redirect('home')
-    context = {
-        'newNoteForm': newNoteForm,
-    }
-    return render(request, 'newNote.html',context)
+    form = createNewNoteForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('home')
+    context = {'form': form, 'title':'Create New Note'}
+    return render(request,'newnote.html',context)
+
 
 def deleteNote(request, note_id):
     if Notes.objects.filter(id=note_id).exists():
@@ -181,15 +177,10 @@ def deleteNote(request, note_id):
         return JsonResponse({'deleted': False, 'message': 'Note Not saved'})
 
 def updateNote(request, note_id): #Need to add stuff for update still
-    newNoteForm = createNewNoteForm
     note = Notes.objects.get(id=note_id)
-    Oldtitle = note.title
-    Oldnote= note.note
-    IdOfNote = note.id
-    context = {
-        'newNoteForm': newNoteForm,
-        'Oldtitle': Oldtitle,
-        'Oldnote': Oldnote,
-        'IdOfNote': IdOfNote,
-    }
-    return render(request,'newNote.html',context)
+    form = createNewNoteForm(request.POST or None, instance=note)
+    if form.is_valid():
+        form.save()
+        return redirect('home')
+    context = {'form': form, 'title': 'Edit Existing Note'}
+    return render(request, 'newNote.html',context)
