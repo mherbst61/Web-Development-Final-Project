@@ -113,7 +113,7 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script>
-    window.onload=function (){
+      window.onload=function (){
         darkmodeSwitchSet()
     }
 
@@ -134,12 +134,12 @@
     function darkmodeSet(){
         var darkModeSwitch = document.getElementById("Darkmode")
         if (darkModeSwitch.checked){
-            document.cookie = "darkModeEnable= true;"
+            document.cookie = "darkModeEnable= true; path=/"
             console.log("darkmodeSet Says:"+document.cookie)
             darkmodeChanger(true);
         }else{
             darkModeCheck = false;
-            document.cookie = "darkModeEnable= false"
+            document.cookie = "darkModeEnable= false; path=/"
             console.log("darkmodeSet Says:"+document.cookie)
             darkmodeChanger(false);
         }

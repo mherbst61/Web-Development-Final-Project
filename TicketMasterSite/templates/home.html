@@ -107,12 +107,12 @@
     function darkmodeSet(){
         var darkModeSwitch = document.getElementById("Darkmode")
         if (darkModeSwitch.checked){
-            document.cookie = "darkModeEnable= true;"
+            document.cookie = "darkModeEnable= true; path=/"
             console.log("darkmodeSet Says:"+document.cookie)
             darkmodeChanger(true);
         }else{
             darkModeCheck = false;
-            document.cookie = "darkModeEnable= false"
+            document.cookie = "darkModeEnable= false; path=/"
             console.log("darkmodeSet Says:"+document.cookie)
             darkmodeChanger(false);
         }
