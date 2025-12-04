@@ -8,7 +8,7 @@
     {% bootstrap_javascript %}
 </head>
 <body>
-<form action="{% if form.instance.id %} {% url 'updateNote' form.instance.id %} {% else%} {% url 'createNewNote' %} {% endif %}" method="post">
+<form action="{% if form.instance.id %} {% url 'updateNote' form.instance.id %} {% else%} {% url 'createNewNote'ticket_id.ticket_id %} {% endif %}" method="post">
     {% csrf_token %}
 <div class="topBar p-lg-5 p-0 mb-3">
     <div class="text-center container-fluid" id="topText">
@@ -22,6 +22,7 @@
     </div>
 
         <div class="row h-4 shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+            {{ form.ticket_id  }}
             <div class="col-12 mb-2">
                 <label class="mb-1">Title:</label>
                 {{ form.title }}
@@ -57,7 +58,6 @@
         }
 
     }
-
 
     function clearText(){
         console.log("Clear Text clicked");

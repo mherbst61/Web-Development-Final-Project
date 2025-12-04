@@ -75,5 +75,6 @@ class SavedTickets(models.Model):
     ticket_id = models.CharField(max_length=100, blank=True, null=True)
 
 class Notes (models.Model):
+    ticket_id = models.CharField(max_length=100, blank=True, null=True)
     title = models.CharField(max_length=100)
     note = models.TextField()

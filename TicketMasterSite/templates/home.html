@@ -55,32 +55,6 @@
             </p>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <h3 class="d-inline">Notes:</h3>
-            <a type="button" href="{% url 'createNewNote' %}" class="d-inline float-end btn btn-primary">Create Note</a>
-            <p>
-            <hr>
-            </p>
-        </div>
-        {% for note in notes %}
-            <div id="Note{{ note.id }}" class="row h-4 shadow-lg p-3 mb-5 bg-body-tertiary rounded">
-                <div class="col-6 d-inline">
-                    <h3>{{ note.title }}</h3>
-                </div>
-                <div class="col-6 d-inline">
-                    <div class="float-end">
-                    <a class="btn btn-warning mr-2" href="{% url 'updateNote' note.id %}">Update Note</a>
-                        <button class="btn btn-danger" onclick="deleteNote('{% url 'deleteNote'  note.id  %}', '{{ note.id }}')">Delete Note</button>
-                    </div>
-                </div>
-                <div class="col-12 mt-3 shadow-lg rounded text-wrap">
-                    <p class="text-break">{{ note.note }}</p>
-                </div>
-
-            </div>
-        {% endfor %}
-
     </div>
 
 </div>
@@ -126,23 +100,6 @@
         }
 
     }
-
-
-
-
-    function deleteNote(url,id){
-    console.log("delete run");
-$.ajax({
-    url:url,
-    type: 'GET',
-    success: function (response) {
-        alert(response.message);
-        if(response.deleted){
-           $('#Note'+id).remove();
-        }
-    }
-    })
-}
 </script>
 
 </body>

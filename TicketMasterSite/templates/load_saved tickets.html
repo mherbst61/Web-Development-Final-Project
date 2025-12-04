@@ -69,9 +69,38 @@
                         class="bi bi-ticket-detailed-fill"></i> View Ticket</a>
                 <a type="button" class="btn btn-outline-primary" onclick="deleteTicket('{% url 'deleteTicket'  ticket.ticket_id  %}', '{{ ticket.ticket_id }}')"><i class="bi bi-save"></i> Delete Ticket</a>
             </div>
+           <div class="row">
+        <div class="col-12">
+            <h3 class="d-inline">Notes:</h3>
+            <a type="button" href="{% url 'createNewNote' ticket.ticket_id %}" class="d-inline float-end btn btn-primary">Create Note</a>
+            <p>
+            <hr>
+            </p>
+        </div>
+                <div class="col-lg-4 col-12">
+                  {% for note in notes %}
+                      {% if note.ticket_ID == ticket.ticket_id %}
+            <div id="Note{{ note.id }}" class="row h-4 shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+                <div class="col-6 d-inline">
+                    <h3>{{ note.title }}</h3>
+                </div>
+                <div class="col-6 d-inline">
+                    <div class="float-end">
+                    <a class="btn btn-warning mr-2" href="{% url 'updateNote' note.id %}">Update Note</a>
+                        <button class="btn btn-danger" onclick="deleteNote('{% url 'deleteNote'  note.id  %}', '{{ note.id }}')">Delete Note</button>
+                    </div>
+                </div>
+                <div class="col-12 mt-3 shadow-lg rounded text-wrap">
+                    <p class="text-break">{{ note.note }}</p>
+                </div>
+
+            </div>
+                      {% endif %}
+        {% endfor %}
+            </div>
         </div>
     {% endfor %}
-
+            </div>
     </div>
 </div>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
@@ -150,6 +179,22 @@ $.ajax({
     }
     })
 }
+
+    function deleteNote(url,id){
+    console.log("delete run");
+$.ajax({
+    url:url,
+    type: 'GET',
+    success: function (response) {
+        alert(response.message);
+        if(response.deleted){
+           $('#Note'+id).remove();
+        }
+    }
+    })
+}
+
+
 </script>
 
 

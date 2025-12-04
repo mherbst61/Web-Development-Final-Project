@@ -71,7 +71,7 @@ def search(request):
                     theater_zip = event["_embedded"]["venues"][0]["postalCode"]
                     theater_address2 = theater_city + ", " + theater_state + ", " + theater_zip
                     event_url = event["url"]
-                    event_dateTimeString = event["dates"]["start"]["dateTime"]
+                    event_dateTimeString = event["dates"]["start"]["dateTime"] # use local date and time
                     if (event_dateTimeString or event_dateTimeString == ""):
                         try:
                             event_dateTime = datetime.fromisoformat(event_dateTimeString)
@@ -159,12 +159,13 @@ def deleteTicket(request, ticket_id):
     else:
         return JsonResponse({'deleted':False,'message':'Ticket Not saved'})
 
-def createNewNote(request):
+def createNewNote(request, ticket_id):
     form = createNewNoteForm(request.POST or None)
     if form.is_valid():
+        form.ticket_id=ticket_id;
         form.save()
-        return redirect('home')
-    context = {'form': form, 'title':'Create New Note'}
+        return redirect('loadTickets')
+    context = {'form': form, 'title':'Create New Note', 'ticket_id': ticket_id}
     return render(request,'newnote.html',context)
 
 
