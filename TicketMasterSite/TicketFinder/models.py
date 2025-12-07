@@ -70,8 +70,8 @@ class SavedTickets(models.Model):
     theater_address1 = models.CharField(max_length=100, blank=True, null=True)
     theater_address2 = models.CharField(max_length=100, blank=True, null=True)
     event_imageUrl = models.URLField(blank=True, null=True)
-    event_ConvertedDate = models.CharField(max_length=100, blank=True, null=True)
-    event_ConvertedTime = models.CharField(max_length=100, blank=True, null=True)
+    event_Date = models.CharField(max_length=100, blank=True, null=True)
+    event_Time = models.CharField(max_length=100, blank=True, null=True)
     ticket_id = models.CharField(max_length=100, blank=True, null=True)
 
 class Notes (models.Model):

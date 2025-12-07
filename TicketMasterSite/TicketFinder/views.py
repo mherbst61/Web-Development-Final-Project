@@ -20,9 +20,10 @@ def launchHomePage(request):
     savedTickets=SavedTickets.objects.all()
     savedTicketsCount=int(savedTickets.count())
     notes=Notes.objects.all()
+    notesCount=int(notes.count())
 
 
-    context = {'savedTicketsCount': savedTicketsCount, 'notes':notes}
+    context = {'savedTicketsCount': savedTicketsCount, 'notesCount': notesCount}
     return render(request, 'home.html',context)
 
 
@@ -71,17 +72,19 @@ def search(request):
                     theater_zip = event["_embedded"]["venues"][0]["postalCode"]
                     theater_address2 = theater_city + ", " + theater_state + ", " + theater_zip
                     event_url = event["url"]
-                    event_dateTimeString = event["dates"]["start"]["dateTime"] # use local date and time
-                    if (event_dateTimeString or event_dateTimeString == ""):
-                        try:
-                            event_dateTime = datetime.fromisoformat(event_dateTimeString)
-                            event_ConvertedDate = event_dateTime.strftime("%a %b %d, %Y")
-                            event_ConvertedTime = event_dateTime.strftime("%I:%M %p")
-                        except Exception as d:
-                            print(d)
-                    else:
-                        event_ConvertedDate =""
-                        event_ConvertedTime=""
+                    event_date = event["dates"]["start"]["localDate"]
+                    event_time = event["dates"]["start"]["localTime"]
+                    #event_dateTimeString = event["dates"]["start"]["dateTime"] # use local date and time
+                    #if (event_dateTimeString or event_dateTimeString == ""):
+                     #   try:
+                      #      event_dateTime = datetime.fromisoformat(event_dateTimeString)
+                       #     event_ConvertedDate = event_dateTime.strftime("%a %b %d, %Y")
+                        #    event_ConvertedTime = event_dateTime.strftime("%I:%M %p")
+                        #except Exception as d:
+                         #   print(d)
+                    #else:
+                     #  event_ConvertedDate =""
+                      #  event_ConvertedTime=""
 
                 #print(event_name)
                 #print(event_dateTime)
@@ -93,8 +96,8 @@ def search(request):
                         "theater_address1": theater_address1,
                         "theater_address2": theater_address2,
                         "event_imageUrl": event_imageUrl,
-                        "event_ConvertedDate": event_ConvertedDate,
-                        "event_ConvertedTime": event_ConvertedTime,
+                        "event_date": event_date,
+                        "event_time": event_time,
                         "ticket_id":ticket_id,
                     }
                     eventObject.append(ticket)
@@ -126,10 +129,10 @@ def SavedTicket(request):
         print(theater_address2)
         event_imageUrl= request.POST["event_imageUrl"]
         print(event_imageUrl)
-        event_ConvertedDate= request.POST["event_ConvertedDate"]
-        print(event_ConvertedDate)
-        event_ConvertedTime= request.POST["event_ConvertedTime"]
-        print(event_ConvertedTime)
+        event_Date= request.POST["event_Date"]
+        print(event_Date)
+        event_Time= request.POST["event_Time"]
+        print(event_Time)
         ticket_id= request.POST["ticket_id"]
         print(ticket_id)
         if SavedTickets.objects.filter(ticket_id=ticket_id).exists():
@@ -137,7 +140,7 @@ def SavedTicket(request):
             return JsonResponse({"message": "Ticket Already Saved "})
         else:
             print("Ticket Saved if")
-            SavedTickets.objects.create(event_name=event_name, event_url=event_url, theater_name=theater_name,theater_address1=theater_address1,theater_address2=theater_address2,event_imageUrl=event_imageUrl,event_ConvertedDate=event_ConvertedDate,event_ConvertedTime=event_ConvertedTime,ticket_id=ticket_id)
+            SavedTickets.objects.create(event_name=event_name, event_url=event_url, theater_name=theater_name,theater_address1=theater_address1,theater_address2=theater_address2,event_imageUrl=event_imageUrl,event_Date=event_Date,event_Time=event_Time,ticket_id=ticket_id)
             return JsonResponse({"message":"Ticket Saved"})
 
     return JsonResponse({"message":"Error Ticket Not saved"})
@@ -145,8 +148,9 @@ def SavedTicket(request):
 #Loads tickets on the saved tickets page from the database
 def loadTickets(request):
     ticket = SavedTickets.objects.all()
+    note = Notes.objects.all()
     message_count = int(ticket.count())
-    context = {'tickets': ticket,'message_count': message_count}
+    context = {'tickets': ticket,'message_count': message_count,'notes': note}
     return render(request, 'load_saved tickets.html', context)
 
 #Deletes a ticket from the database
@@ -162,8 +166,10 @@ def deleteTicket(request, ticket_id):
 def createNewNote(request, ticket_id):
     form = createNewNoteForm(request.POST or None)
     if form.is_valid():
-        form.ticket_id=ticket_id;
-        form.save()
+        note = form.save(commit=False)
+        note.ticket_id = ticket_id
+        print(ticket_id)
+        note.save()
         return redirect('loadTickets')
     context = {'form': form, 'title':'Create New Note', 'ticket_id': ticket_id}
     return render(request,'newnote.html',context)
@@ -177,11 +183,19 @@ def deleteNote(request, note_id):
     else:
         return JsonResponse({'deleted': False, 'message': 'Note Not saved'})
 
+def deleteAllNotes(request, ticket_id):
+    note = Notes.objects.filter(ticket_id=ticket_id)
+    if note.exists():
+        note.delete()
+        return JsonResponse({'deleted': True})
+    else:
+            return JsonResponse({'deleted': False})
+
 def updateNote(request, note_id): #Need to add stuff for update still
     note = Notes.objects.get(id=note_id)
     form = createNewNoteForm(request.POST or None, instance=note)
     if form.is_valid():
         form.save()
-        return redirect('home')
+        return redirect('loadTickets')
     context = {'form': form, 'title': 'Edit Existing Note'}
     return render(request, 'newNote.html',context)

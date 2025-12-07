@@ -70,6 +70,7 @@
 
 </div>
 <!-- This div is a placeholder for the information coming from the API -->
+{% if tickets%}
 <div class="container shadow-lg p-lg-5 pt-3" id="results">
 
     {% if not message == "" %}
@@ -93,8 +94,8 @@
                 <p>{{ ticket.theater_address1 }}<br>{{ ticket.theater_address2 }}</p>
             </div>
             <div class="col-lg-4 col-6 mt-lg-0 mt-3 text-end text-primary-emphasis">
-                <p class="text-primary-emphasis fw-bold fs-5">{{ ticket.event_ConvertedDate }}</p>
-                <p class="text-primary-emphasis fw-bold fs-4">{{ ticket.event_ConvertedTime }}</p>
+                <p class="text-primary-emphasis fw-bold fs-5">{{ ticket.event_Date }}</p>
+                <p class="text-primary-emphasis fw-bold fs-4">{{ ticket.event_Time }}</p>
                 <a type="button" class="btn btn-outline-primary" href={{ ticket.event_url }} target="_blank"><i
                         class="bi bi-ticket-detailed-fill"></i> View Ticket</a>
                 <!--  <input type="hidden" id="event_name" name="event_name" value="{ ticket.event_name  }}">
@@ -113,6 +114,7 @@
     {% endfor %}
 
     </div>
+{% endif %}
 </div>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script>
@@ -158,7 +160,7 @@
 
 
 
-    function saveTicket(eventName,eventUrl,theaterName,theaterAddress1,theaterAddress2,eventImageUrl,eventConvertedDate,eventConvertedTime,ticketId){
+    function saveTicket(eventName,eventUrl,theaterName,theaterAddress1,theaterAddress2,eventImageUrl,event_Date,event_Time,ticketId){
         console.log("Save ticket ran")
 
 
@@ -172,8 +174,8 @@
             theater_address1: theaterAddress1,
             theater_address2: theaterAddress2,
             event_imageUrl: eventImageUrl,
-            event_ConvertedDate: eventConvertedDate,
-            event_ConvertedTime: eventConvertedTime,
+            event_Date: event_Date,
+            event_Time: event_Time,
             ticket_id: ticketId,
             csrfmiddlewaretoken: '{{ csrf_token }}'
             },

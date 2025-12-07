@@ -8,7 +8,7 @@
     {% bootstrap_javascript %}
 </head>
 <body>
-<form action="{% if form.instance.id %} {% url 'updateNote' form.instance.id %} {% else%} {% url 'createNewNote'ticket_id.ticket_id %} {% endif %}" method="post">
+<form action="{% if form.instance.id %} {% url 'updateNote' form.instance.id %} {% else%} {% url 'createNewNote' ticket_id %} {% endif %}" method="post">
     {% csrf_token %}
 <div class="topBar p-lg-5 p-0 mb-3">
     <div class="text-center container-fluid" id="topText">

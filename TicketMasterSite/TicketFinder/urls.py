@@ -7,6 +7,7 @@ urlpatterns = [
     path('savedTickets/', views.SavedTicket, name='savedTickets'),
     path('loadTickets/', views.loadTickets, name='loadTickets'),
     path('deleteTicket/<str:ticket_id>/', views.deleteTicket, name='deleteTicket'),
+    path('deleteAllNotes/<str:ticket_id>/', views.deleteAllNotes, name='deleteAllNotes'),
     path('createNewNote/<str:ticket_id>/', views.createNewNote, name='createNewNote'),
     path('deleteNote/<str:note_id>/', views.deleteNote, name='deleteNote'),
     path('updateNote/<str:note_id>/', views.updateNote, name='updateNote'),

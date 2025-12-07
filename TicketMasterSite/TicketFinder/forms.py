@@ -40,7 +40,7 @@ class createNewNoteForm (forms.ModelForm):
         'class': 'form-control',
         'placeholder':'Enter your note'
         }),
-        'ticket_id':forms.NumberInput(attrs={
+        'ticket_id':forms.TextInput(attrs={
             'class':'form-control',
             'id':'ticketIdForm',
             'hidden':'true'
