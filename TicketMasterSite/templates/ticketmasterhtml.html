@@ -99,7 +99,7 @@
                 <div class="d-flex justify-content-end gap-2">
                      <a type="button" class="btn btn-outline-primary" href={{ ticket.event_url }} target="_blank"><i
                         class="bi bi-ticket-detailed-fill"></i> View Ticket</a>
-                    <button style="display:{{ticket.saveButton}}" onclick="saveTicket('{{ ticket.event_name }}','{{ ticket.event_url  }}','{{ ticket.theater_name  }}','{{ ticket.theater_address1  }}','{{ ticket.theater_address2  }}','{{ ticket.event_imageUrl  }}','{{ ticket.event_ConvertedDate  }}','{{ ticket.event_ConvertedTime  }}','{{ ticket.ticket_id  }}')" id="saveButton" class="btn btn-outline-primary"><i class="bi bi-save"></i> Save Ticket</button>
+                    <button style="display:{{ticket.saveButton}}" onclick="saveTicket('{{ ticket.event_name }}','{{ ticket.event_url  }}','{{ ticket.theater_name  }}','{{ ticket.theater_address1  }}','{{ ticket.theater_address2  }}','{{ ticket.event_imageUrl  }}','{{ ticket.event_ConvertedDate  }}','{{ ticket.event_ConvertedTime  }}','{{ ticket.ticket_id  }}')" id="saveButton-{{ ticket.ticket_id }}" class="btn btn-outline-primary"><i class="bi bi-save"></i> Save Ticket</button>
 
                 </div>
             </div>
@@ -176,6 +176,7 @@
         })
             .done((data) => {
                 alert(data.message);
+                $('#saveButton-'+ticketId).hide()
             })
             .fail((err) => {
                 alert("Ticket Failed to save: ",err);
