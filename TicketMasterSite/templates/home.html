@@ -8,7 +8,7 @@
     {% bootstrap_javascript %}
 </head>
 <body>
-<nav class="navbar navbar-expand-lg fixed-top" >
+<nav id="navBar" class="navbar navbar-expand-lg fixed-top" >
     <div class="container">
         <a class="navbar-brand" href="#">TicketFinder</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -98,13 +98,17 @@
         }
     }
 
-    function darkmodeChanger(state){
+      function darkmodeChanger(state){
+        const navbar = document.getElementById("navBar");
         if(state){
             document.documentElement.setAttribute('data-bs-theme', 'dark');
+            navbar.classList.remove("bg-light");
+            navbar.classList.add("bg-dark");
         }else{
             document.documentElement.setAttribute('data-bs-theme', 'light');
+            navbar.classList.remove("bg-dark");
+            navbar.classList.add("bg-light");
         }
-
     }
 </script>
 

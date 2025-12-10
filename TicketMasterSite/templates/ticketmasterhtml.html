@@ -11,7 +11,7 @@
     </script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg fixed-top" >
+<nav id="navBar" class="navbar navbar-expand-lg fixed-top" >
     <div class="container">
   <a class="navbar-brand" href="#">TicketFinder</a>
 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,8 +74,8 @@
 <div class="container shadow-lg p-lg-5 pt-3" id="results">
 
     {% if not message == "" %}
-        <div class="row fs-5 fw-semibold text-secondary">
-        <div class="col-12">
+        <div class="row fs-5 fw-semibold">
+        <div class="col-12 text-secondary">
             <p>{{message}}</p>
         </div>
     {% endif %}
@@ -83,7 +83,7 @@
 
 
     {% for ticket in tickets %}
-        <div class="row h-4 shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+        <div class="row h-4 shadow-lg p-3 mb-2 bg-body-tertiary rounded">
             <div class="col-lg-4 col-12">
                 <img src="{{ ticket.event_imageUrl }}" class="img-fluid rounded" alt="event-img"/>
             </div>
@@ -94,21 +94,14 @@
                 <p>{{ ticket.theater_address1 }}<br>{{ ticket.theater_address2 }}</p>
             </div>
             <div class="col-lg-4 col-6 mt-lg-0 mt-3 text-end text-primary-emphasis">
-                <p class="text-primary-emphasis fw-bold fs-5">{{ ticket.event_Date }}</p>
-                <p class="text-primary-emphasis fw-bold fs-4">{{ ticket.event_Time }}</p>
-                <a type="button" class="btn btn-outline-primary" href={{ ticket.event_url }} target="_blank"><i
+                <p class="text-primary-emphasis fw-bold fs-5">{{ ticket.event_date }}</p>
+                <p class="text-primary-emphasis fw-bold fs-4">{{ ticket.event_time }}</p>
+                <div class="d-flex justify-content-end gap-2">
+                     <a type="button" class="btn btn-outline-primary" href={{ ticket.event_url }} target="_blank"><i
                         class="bi bi-ticket-detailed-fill"></i> View Ticket</a>
-                <!--  <input type="hidden" id="event_name" name="event_name" value="{ ticket.event_name  }}">
-                <input type="hidden" id="event_url" name="event_url" value="{ ticket.event_url  }}">
-                <input type="hidden" id="theater_name" name="theater_name" value="{ ticket.theater_name  }}">
-                <input type="hidden" id="theater_address1" name="theater_address1" value="{ ticket.theater_address1  }}">
-                <input type="hidden" id="theater_address2" name="theater_address2" value="{ ticket.theater_address2  }}">
-                <input type="hidden" id="event_imageUrl" name="event_imageUrl" value="{ ticket.event_imageUrl  }}">
-                <input type="hidden" id="event_ConvertedDate" name="event_ConvertedDate" value="{ ticket.event_ConvertedDate  }}">
-                <input type="hidden" id="event_ConvertedTime" name="event_ConvertedTime" value="{ ticket.event_ConvertedTime  }}">
-                <input type="hidden" id="ticket_id" name="ticket_id" value="{ ticket.ticket_id  }"> -->
+                    <button style="display:{{ticket.saveButton}}" onclick="saveTicket('{{ ticket.event_name }}','{{ ticket.event_url  }}','{{ ticket.theater_name  }}','{{ ticket.theater_address1  }}','{{ ticket.theater_address2  }}','{{ ticket.event_imageUrl  }}','{{ ticket.event_ConvertedDate  }}','{{ ticket.event_ConvertedTime  }}','{{ ticket.ticket_id  }}')" id="saveButton" class="btn btn-outline-primary"><i class="bi bi-save"></i> Save Ticket</button>
 
-                <button onclick="saveTicket('{{ ticket.event_name }}','{{ ticket.event_url  }}','{{ ticket.theater_name  }}','{{ ticket.theater_address1  }}','{{ ticket.theater_address2  }}','{{ ticket.event_imageUrl  }}','{{ ticket.event_ConvertedDate  }}','{{ ticket.event_ConvertedTime  }}','{{ ticket.ticket_id  }}')" id="saveButton" class="btn btn-outline-primary"><i class="bi bi-save"></i> Save Ticket</button>
+                </div>
             </div>
         </div>
     {% endfor %}
@@ -151,19 +144,20 @@
     }
 
     function darkmodeChanger(state){
+        const navbar = document.getElementById("navBar");
         if(state){
             document.documentElement.setAttribute('data-bs-theme', 'dark');
+            navbar.classList.remove("bg-light");
+            navbar.classList.add("bg-dark");
         }else{
             document.documentElement.setAttribute('data-bs-theme', 'light');
+            navbar.classList.remove("bg-dark");
+            navbar.classList.add("bg-light");
         }
     }
 
-
-
     function saveTicket(eventName,eventUrl,theaterName,theaterAddress1,theaterAddress2,eventImageUrl,event_Date,event_Time,ticketId){
         console.log("Save ticket ran")
-
-
         $.ajax({
             type: 'POST',
             url: {% url 'savedTickets' %},
