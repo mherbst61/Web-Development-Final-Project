@@ -5,6 +5,8 @@ from TicketFinder.forms import ticketSearchForm
 from TicketFinder.forms import createNewNoteForm
 from TicketFinder.models import SavedTickets, Search, Notes
 from TicketFinder.models import Notes
+
+
 # Create your views here.
 
 # Home Page launch
@@ -13,10 +15,6 @@ def launchHomePage(request):
     savedTicketsCount = int(savedTickets.count())
     notes = Notes.objects.all()
     notesCount = int(notes.count())
-
-
-
-
     context = {'savedTicketsCount': savedTicketsCount, 'notesCount': notesCount}
     return render(request, 'home.html', context)
 
@@ -46,37 +44,38 @@ def search(request):
                     response = requests.get(
                         "https://app.ticketmaster.com/discovery/v2/events.json?&sort=date,asc&countryCode=US&stateCode=" + state + "&city=" + city + "&classificationName=" + genre + "&apikey=" + apiKey)
                     data = response.json()
-                    if "_embedded" not in data:
-                        message = "Events Not found Try different parameters"
                 except:
                     message = "Error in the query attempt"
                 # print(data)
                 event_imageUrl = ""
-                message = str(len(data["_embedded"]["events"])) + " Events Found"
-                for event in data["_embedded"]["events"]:
-                    for image in event["images"]:
-                        if (image["width"] == 2048 and image["height"] == 1152):
-                            event_imageUrl = image["url"]
-                    event_name = event["name"]
-                    ticket_id = event["id"]
-                    theater_name = event["_embedded"]["venues"][0]["name"]
-                    theater_address1 = event["_embedded"]["venues"][0]["address"]["line1"]
-                    theater_city = event["_embedded"]["venues"][0]["city"]["name"]
-                    theater_state = event["_embedded"]["venues"][0]["state"]["name"]
-                    theater_zip = event["_embedded"]["venues"][0]["postalCode"]
-                    theater_address2 = theater_city + ", " + theater_state + ", " + theater_zip
-                    event_url = event["url"]
-                    event_date = event["dates"]["start"]["localDate"]
-                    event_time = event["dates"]["start"]["localTime"]
-                    if SavedTickets.objects.filter(ticket_id=ticket_id).exists():
-                        saveButton = "none"
-                    else:
-                        saveButton = "block"
+                if "_embedded" not in data:
+                    message = "Events Not found"
+                else:
+                    message = str(len(data["_embedded"]["events"])) + " Events Found"
+                    for event in data["_embedded"]["events"]:
+                        for image in event["images"]:
+                            if (image["width"] == 2048 and image["height"] == 1152):
+                                event_imageUrl = image["url"]
+                        event_name = event["name"]
+                        ticket_id = event["id"]
+                        theater_name = event["_embedded"]["venues"][0]["name"]
+                        theater_address1 = event["_embedded"]["venues"][0]["address"]["line1"]
+                        theater_city = event["_embedded"]["venues"][0]["city"]["name"]
+                        theater_state = event["_embedded"]["venues"][0]["state"]["name"]
+                        theater_zip = event["_embedded"]["venues"][0]["postalCode"]
+                        theater_address2 = theater_city + ", " + theater_state + ", " + theater_zip
+                        event_url = event["url"]
+                        event_date = event["dates"]["start"]["localDate"]
+                        event_time = event["dates"]["start"]["localTime"]
+                        if SavedTickets.objects.filter(ticket_id=ticket_id).exists():
+                            saveButton = "none"
+                        else:
+                            saveButton = "block"
 
-                    print('event date',event_date)
-                    print('event time',event_time)
+                        print('event date', event_date)
+                        print('event time', event_time)
 
-                    ticket = {
+                        ticket = {
                         "event_name": event_name,
                         "event_url": event_url,
                         "theater_name": theater_name,
@@ -88,12 +87,13 @@ def search(request):
                         "ticket_id": ticket_id,
                         "saveButton": saveButton,
                     }
-                    eventObject.append(ticket)
+                        eventObject.append(ticket)
 
             except Exception as e:
                 print("Exception: ", e)
     # if(save_TicketForm.is_valid()):
 
+    print("message: ", message)
     context = {
         'search_form': search_form,
         'tickets': eventObject,

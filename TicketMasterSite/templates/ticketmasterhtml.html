@@ -69,18 +69,24 @@
     </div>
 
 </div>
-<!-- This div is a placeholder for the information coming from the API -->
-{% if tickets%}
-<div class="container shadow-lg p-lg-5 pt-3" id="results">
 
-    {% if not message == "" %}
+{% if not message == "" %}
+    <div class="container shadow-lg p-lg-5 pt-3" id="results">
+  {% if message != "Events Not found" %}
         <div class="row fs-5 fw-semibold">
         <div class="col-12 text-secondary">
             <p>{{message}}</p>
         </div>
     {% endif %}
-
-
+    {% if message == "Events Not found" %}
+        <div class="row fs-5 fw-semibold">
+        <div class="col-12 text-secondary text-center">
+            <h1>No results were found for these search parameters please try again</h1>
+        </div>
+        {% endif %}
+{% endif %}
+<!-- This div is a placeholder for the information coming from the API -->
+{% if tickets%}
 
     {% for ticket in tickets %}
         <div class="row h-4 shadow-lg p-3 mb-2 bg-body-tertiary rounded">
