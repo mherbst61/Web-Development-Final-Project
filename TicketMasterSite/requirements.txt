@@ -16,3 +16,4 @@ urllib3==2.5.0
 wheel==0.45
 django-crispy-forms==2.1
 django-bootstrap5
+requests
